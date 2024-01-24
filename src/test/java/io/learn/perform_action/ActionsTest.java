@@ -68,6 +68,21 @@ public class ActionsTest extends BaseTest {
     }
 
     @Test
+    void testMouseOver1() {
+        driver.get(
+                "https://bonigarcia.dev/selenium-webdriver-java/mouse-over.html");
+        driver.manage().window().maximize();
+        Actions actions = new Actions(driver);
+
+        WebElement image = driver.findElement(By.xpath("//img[@src='img/compass.png']"));
+        actions.moveToElement(image).build().perform();
+
+        WebElement caption = driver.findElement(
+                RelativeLocator.with(By.tagName("div")).near(image));
+        assertThat(caption.getText()).containsIgnoringCase("compass");
+    }
+
+    @Test
     void testMouseOver() {
         driver.get(
                 "https://bonigarcia.dev/selenium-webdriver-java/mouse-over.html");
@@ -120,7 +135,7 @@ public class ActionsTest extends BaseTest {
         int numPoints = 10;
         int radius = 30;
         for (int i = 0; i <= numPoints; i++) {
-            double angle = Math.toRadians(360 * i / numPoints);
+            double angle = Math.toRadians((double) (360 * i) / numPoints);
             double x = Math.sin(angle) * radius;
             double y = Math.cos(angle) * radius;
             actions.moveByOffset((int) x, (int) y);
@@ -199,7 +214,7 @@ public class ActionsTest extends BaseTest {
 
         WebElement colorPicker = driver.findElement(By.name("my-colors"));
         String initColor = colorPicker.getAttribute("value");
-        log.debug("The initial color is {}", initColor);
+        log.info("The initial color is {}", initColor);
 
         Color red = new Color(255, 0, 0, 1);
         String script = String.format(
@@ -207,7 +222,7 @@ public class ActionsTest extends BaseTest {
         js.executeScript(script, colorPicker);
 
         String finalColor = colorPicker.getAttribute("value");
-        log.debug("The final color is {}", finalColor);
+        log.info("The final color is {}", finalColor);
         assertThat(finalColor).isNotEqualTo(initColor);
         assertThat(Color.fromString(finalColor)).isEqualTo(red);
     }
