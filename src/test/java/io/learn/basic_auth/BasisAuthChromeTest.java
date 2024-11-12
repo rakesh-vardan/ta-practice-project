@@ -40,4 +40,12 @@ public class BasisAuthChromeTest {
         WebElement body = driver.findElement(By.tagName("body"));
         assertThat(body.getText()).contains("Your browser made it!");
     }
+
+    @Test
+    public void testBasicAuthOld() {
+        driver.get("https://guest:guest@jigsaw.w3.org/HTTP/Basic/");
+
+        WebElement body = driver.findElement(By.tagName("body"));
+        assertThat(body.getText()).contains("Your browser made it!");
+    }
 }

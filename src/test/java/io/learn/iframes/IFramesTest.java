@@ -44,5 +44,6 @@ public class IFramesTest extends BaseTest {
         wait.until(ExpectedConditions.numberOfElementsToBeMoreThan(pName, 0));
         List<WebElement> paragraphs = driver.findElements(pName);
         assertThat(paragraphs).hasSize(20);
+        driver.switchTo().defaultContent();
     }
 }

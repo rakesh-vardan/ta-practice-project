@@ -9,8 +9,8 @@ import lombok.extern.log4j.Log4j2;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.devtools.DevTools;
-import org.openqa.selenium.devtools.v119.network.Network;
-import org.openqa.selenium.devtools.v119.network.model.ConnectionType;
+import org.openqa.selenium.devtools.v127.network.Network;
+import org.openqa.selenium.devtools.v127.network.model.ConnectionType;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -40,7 +40,8 @@ public class EmulateNetworkConditionChromeTest {
         devTools.send(Network.enable(Optional.empty(), Optional.empty(),
                 Optional.empty()));
         devTools.send(Network.emulateNetworkConditions(false, 100, 50 * 1024,
-                50 * 1024, Optional.of(ConnectionType.CELLULAR3G)));
+                50 * 1024, Optional.of(ConnectionType.CELLULAR3G), Optional.of(5),
+                Optional.of(5), Optional.of(true)));
 
         long initMillis = System.currentTimeMillis();
         driver.get("https://bonigarcia.dev/selenium-webdriver-java/");
