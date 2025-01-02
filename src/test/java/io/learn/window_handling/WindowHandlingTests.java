@@ -31,10 +31,10 @@ public class WindowHandlingTests extends BaseTest {
         driver.switchTo().newWindow(WindowType.WINDOW);
         driver.get(
                 "https://bonigarcia.dev/selenium-webdriver-java/web-form.html");
-        assertThat(driver.getWindowHandles().size()).isEqualTo(2);
+        assertThat(driver.getWindowHandles()).hasSize(2);
 
         driver.switchTo().window(initHandle);
         driver.close();
-        assertThat(driver.getWindowHandles().size()).isEqualTo(1);
+        assertThat(driver.getWindowHandles()).hasSize(1);
     }
 }

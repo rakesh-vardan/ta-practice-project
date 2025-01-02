@@ -5,6 +5,7 @@ import lombok.extern.log4j.Log4j2;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ByIdOrName;
 import org.openqa.selenium.support.locators.RelativeLocator;
 import org.openqa.selenium.support.pagefactory.ByAll;
@@ -177,19 +178,17 @@ public class IdentifyElement extends BaseTest {
                 String.format("//th[contains(text(),'%d')]", currentYear)));
         monthElement.click();
 
-        // Click on the left arrow using relative locators
-        WebElement arrowLeft = driver.findElement(
-                RelativeLocator.with(By.tagName("th")).toRightOf(monthElement));
+        // Click on the left arrow
+        WebElement arrowLeft = driver.findElement(By.cssSelector("div[class='datepicker-months'] th[class='prev']"));
         arrowLeft.click();
 
         // Click on the current month of that year
-        WebElement monthPastYear = driver.findElement(RelativeLocator
-                .with(By.cssSelector("span[class$=focused]")).below(arrowLeft));
+        WebElement monthPastYear = driver.findElement(By.xpath("//span[@class='month focused']"));
         monthPastYear.click();
 
         // Click on the present day in that month
         WebElement dayElement = driver.findElement(By.xpath(String.format(
-                "//td[@class='day' and contains(text(),'%d')]", currentDay)));
+                "//td[@class='day' and text()='%d']", currentDay)));
         dayElement.click();
 
         // Get the final date on the input text
@@ -206,6 +205,58 @@ public class IdentifyElement extends BaseTest {
 
         assertThat(oneYearBack).isEqualTo(expectedDate);
     }
+
+    @Test
+    public void testTable() {
+        driver.get("file:///C:/Users/DELL/Desktop/employeeTable.html");
+
+        // Locate the table
+        WebElement table = driver.findElement(By.id("employeeTable"));
+
+        // Get all rows in the table body
+        List<WebElement> rows = table.findElements(By.xpath("//tbody/tr"));
+
+        // Iterate through rows and print data
+        for (WebElement row : rows) {
+            List<WebElement> cells = row.findElements(By.tagName("td"));
+            for (WebElement cell : cells) {
+                System.out.print(cell.getText() + " ");
+            }
+            System.out.println();
+        }
+
+        // Count rows in the table body
+        int rowCount = table.findElements(By.xpath("//tbody/tr")).size();
+        System.out.println("Total Rows: " + rowCount);
+
+        // Count columns in the header
+        int columnCount = table.findElements(By.xpath("//thead/tr/th")).size();
+        System.out.println("Total Columns: " + columnCount);
+
+        // Locate the specific cell (second row, second column)
+        WebElement cell = driver.findElement(By.xpath("//tbody/tr[2]/td[2]"));
+        System.out.println("Employee Name: " + cell.getText());
+
+        // Locate the row containing the specific Employee ID
+        WebElement row1 = driver.findElement(By.xpath("//tbody/tr[td[text()='102']]"));
+        String user = row1.findElement(By.xpath("td[2]")).getText();
+        System.out.println("User name: " + user);
+
+        // Locate the row containing the specific name
+        WebElement row2 = driver.findElement(By.xpath("//tbody/tr[td[text()='Charlie']]"));
+
+        // Retrieve the department value (third column)
+        String department = row2.findElement(By.xpath("td[3]")).getText();
+        System.out.println("Charlie's Department: " + department);
+
+        // get data dynamically
+        System.out.println(getCellValue(table, 2, 3));
+    }
+
+    public String getCellValue(WebElement table, int row, int column) {
+        return table.findElement(By.xpath("//tbody/tr[" + row + "]/td[" + column + "]")).getText();
+    }
+
 
     @Test
     void testSendKeys() {
@@ -246,6 +297,23 @@ public class IdentifyElement extends BaseTest {
         for (int i = 0; i < 5; i++) {
             slider.sendKeys(Keys.ARROW_RIGHT);
         }
+
+        String endValue = slider.getAttribute("value");
+        log.debug("The final value of the slider is {}", endValue);
+        assertThat(initValue).isNotEqualTo(endValue);
+    }
+
+    @Test
+    void testSlider2() {
+        driver.get(URL);
+        driver.manage().window().maximize();
+
+        WebElement slider = driver.findElement(By.name("my-range"));
+        String initValue = slider.getAttribute("value");
+        log.debug("The initial value of the slider is {}", initValue);
+
+        Actions actions = new Actions(driver);
+        actions.clickAndHold(slider).moveByOffset(20, 0).build().perform();
 
         String endValue = slider.getAttribute("value");
         log.debug("The final value of the slider is {}", endValue);
