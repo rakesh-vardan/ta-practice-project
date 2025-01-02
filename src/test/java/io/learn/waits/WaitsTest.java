@@ -21,7 +21,7 @@ public class WaitsTest extends BaseTest {
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
 
         WebElement landscape = driver.findElement(By.id("landscape"));
-        assertThat(landscape.getAttribute("src"))
+        assertThat(landscape.getDomAttribute("src"))
                 .containsIgnoringCase("landscape");
     }
 
@@ -33,7 +33,7 @@ public class WaitsTest extends BaseTest {
 
         WebElement landscape = wait.until(ExpectedConditions
                 .presenceOfElementLocated(By.id("landscape")));
-        assertThat(landscape.getAttribute("src"))
+        assertThat(landscape.getDomAttribute("src"))
                 .containsIgnoringCase("landscape");
     }
 
@@ -47,8 +47,9 @@ public class WaitsTest extends BaseTest {
         driver.findElement(By.xpath("//span[text()='+']")).click();
         driver.findElement(By.xpath("//span[text()='3']")).click();
         WebElement element = driver.findElement(By.xpath("//span[text()='=']"));
-        JavascriptExecutor jse = (JavascriptExecutor)driver;
-        jse.executeScript("arguments[0].click();", element);
+//        JavascriptExecutor jse = (JavascriptExecutor)driver;
+//        jse.executeScript("arguments[0].click();", element);
+        element.click();
 
         // ... should be 4, wait for it
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
@@ -66,7 +67,18 @@ public class WaitsTest extends BaseTest {
 
         WebElement landscape = wait.until(ExpectedConditions
                 .presenceOfElementLocated(By.id("landscape")));
-        assertThat(landscape.getAttribute("src"))
+        assertThat(landscape.getDomAttribute("src"))
+                .containsIgnoringCase("landscape");
+    }
+
+    @Test
+    void testHardWaits() throws InterruptedException {
+        driver.get(
+                "https://bonigarcia.dev/selenium-webdriver-java/loading-images.html");
+        Thread.sleep(10000);
+
+        WebElement landscape = driver.findElement(By.id("landscape"));
+        assertThat(landscape.getDomAttribute("src"))
                 .containsIgnoringCase("landscape");
     }
 }

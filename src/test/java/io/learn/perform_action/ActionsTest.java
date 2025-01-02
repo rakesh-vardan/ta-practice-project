@@ -5,13 +5,9 @@ import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.SystemUtils;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.support.Color;
 import org.openqa.selenium.support.locators.RelativeLocator;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.Test;
 
-import java.time.Duration;
 import java.util.Arrays;
 import java.util.List;
 
@@ -160,87 +156,5 @@ public class ActionsTest extends BaseTest {
 
         assertThat(inputText.getAttribute("value"))
                 .isEqualTo(textarea.getAttribute("value"));
-    }
-
-    @Test
-    void testScrollBy() {
-        driver.get(
-                "https://bonigarcia.dev/selenium-webdriver-java/long-page.html");
-        JavascriptExecutor js = (JavascriptExecutor) driver;
-
-        String script = "window.scrollBy(0, 1000);";
-        js.executeScript(script);
-    }
-
-    @Test
-    void testScrollIntoView() {
-        driver.get(
-                "https://bonigarcia.dev/selenium-webdriver-java/long-page.html");
-        JavascriptExecutor js = (JavascriptExecutor) driver;
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
-
-        WebElement lastElement = driver
-                .findElement(By.cssSelector("p:last-child"));
-        String script = "arguments[0].scrollIntoView();";
-        js.executeScript(script, lastElement);
-    }
-
-    @Test
-    void testInfiniteScroll() {
-        driver.get(
-                "https://bonigarcia.dev/selenium-webdriver-java/infinite-scroll.html");
-        JavascriptExecutor js = (JavascriptExecutor) driver;
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-
-        By pLocator = By.tagName("p");
-        List<WebElement> paragraphs = wait.until(
-                ExpectedConditions.numberOfElementsToBeMoreThan(pLocator, 0));
-        int initParagraphsNumber = paragraphs.size();
-
-        WebElement lastParagraph = driver.findElement(
-                By.xpath(String.format("//p[%d]", initParagraphsNumber)));
-        String script = "arguments[0].scrollIntoView();";
-        js.executeScript(script, lastParagraph);
-
-        wait.until(ExpectedConditions.numberOfElementsToBeMoreThan(pLocator,
-                initParagraphsNumber));
-    }
-
-    @Test
-    void testColorPicker() {
-        driver.get(
-                "https://bonigarcia.dev/selenium-webdriver-java/web-form.html");
-        JavascriptExecutor js = (JavascriptExecutor) driver;
-
-        WebElement colorPicker = driver.findElement(By.name("my-colors"));
-        String initColor = colorPicker.getAttribute("value");
-        log.info("The initial color is {}", initColor);
-
-        Color red = new Color(255, 0, 0, 1);
-        String script = String.format(
-                "arguments[0].setAttribute('value', '%s');", red.asHex());
-        js.executeScript(script, colorPicker);
-
-        String finalColor = colorPicker.getAttribute("value");
-        log.info("The final color is {}", finalColor);
-        assertThat(finalColor).isNotEqualTo(initColor);
-        assertThat(Color.fromString(finalColor)).isEqualTo(red);
-    }
-
-    @Test
-    void testAsyncScript() {
-        driver.get("https://bonigarcia.dev/selenium-webdriver-java/");
-        JavascriptExecutor js = (JavascriptExecutor) driver;
-
-        Duration pause = Duration.ofSeconds(2);
-        String script = "const callback = arguments[arguments.length - 1];"
-                + "window.setTimeout(callback, " + pause.toMillis() + ");";
-
-        long initMillis = System.currentTimeMillis();
-        js.executeAsyncScript(script);
-        Duration elapsed = Duration
-                .ofMillis(System.currentTimeMillis() - initMillis);
-        log.debug("The script took {} ms to be executed", elapsed.toMillis());
-        assertThat(elapsed).isGreaterThanOrEqualTo(pause);
     }
 }

@@ -40,8 +40,7 @@ public class FullPageScreenshotFirefoxTest {
         wait.until(ExpectedConditions.presenceOfNestedElementsLocatedBy(
                 By.className("container"), By.tagName("p")));
 
-        byte[] imageBytes = ((FirefoxDriver) driver)
-                .getFullPageScreenshotAs(OutputType.BYTES);
+        byte[] imageBytes = ((FirefoxDriver) driver).getFullPageScreenshotAs(OutputType.BYTES);
         Path destination = Paths.get("fullpage-screenshot-firefox.png");
         Files.write(destination, imageBytes);
 

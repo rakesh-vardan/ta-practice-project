@@ -28,7 +28,7 @@ public class ScreenShotTests extends BaseTest {
         File screenshot = ts.getScreenshotAs(OutputType.FILE);
         log.debug("Screenshot created on {}", screenshot);
 
-        Path destination = Paths.get("screenshot.png");
+        Path destination = Paths.get("screenshot-png.png");
         Files.move(screenshot.toPath(), destination, REPLACE_EXISTING);
         log.debug("Screenshot moved to {}", destination);
 
