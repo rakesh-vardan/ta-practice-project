@@ -26,7 +26,9 @@ public class GeoLocationFirefoxTest {
         FirefoxOptions options = new FirefoxOptions();
         options.addPreference("geo.enabled", true);
         options.addPreference("geo.prompt.testing", true);
+        options.addPreference("geo.prompt.testing.allow", true);
         options.addPreference("geo.provider.use_corelocation", true);
+        options.addPreference("geo.wifi.uri", "data:application/json , { \"status\": \"OK\", \"accuracy\": 100.0, \"location\": { \"lat\": 18.975080, \"lng\": 72.825838, \"latitude\": 18.975080, \"longitude\": 72.825838, \"accuracy\": 100.0 } }");
 
         driver = new FirefoxDriver(options);
     }

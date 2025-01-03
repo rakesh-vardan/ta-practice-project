@@ -1,4 +1,4 @@
-package shadow_dom;
+package io.learn.shadow_dom;
 
 import io.learn.BaseTest;
 import org.openqa.selenium.By;

@@ -97,6 +97,14 @@ public class JavaScriptExecutorTest extends BaseTest {
     }
 
     @Test
+    void testAsyncScript1() {
+        driver.get("https://bonigarcia.dev/selenium-webdriver-java/");
+        long initMillis = System.currentTimeMillis();
+        Duration elapsed = Duration.ofMillis(System.currentTimeMillis() - initMillis);
+        log.info("The script took {} ms to be executed", elapsed.toMillis());
+    }
+
+    @Test
     void testAsyncScript() {
         driver.get("https://bonigarcia.dev/selenium-webdriver-java/");
         JavascriptExecutor js = (JavascriptExecutor) driver;
@@ -109,7 +117,7 @@ public class JavaScriptExecutorTest extends BaseTest {
         js.executeAsyncScript(script);
         Duration elapsed = Duration
                 .ofMillis(System.currentTimeMillis() - initMillis);
-        log.debug("The script took {} ms to be executed", elapsed.toMillis());
+        log.info("The script took {} ms to be executed", elapsed.toMillis());
         assertThat(elapsed).isGreaterThanOrEqualTo(pause);
     }
 }
